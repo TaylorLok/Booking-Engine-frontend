@@ -1,8 +1,7 @@
 'use client'
 
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'
-import { useState } from 'react'
 import { getBooking } from '@/lib/api'
 import { useBookingStatus } from '@/hooks/useBookingStatus'
 
@@ -180,13 +179,10 @@ function ConfirmationContent({ reference }: { reference: string }) {
 export default function ConfirmationPage() {
   const params = useParams<{ reference: string }>()
   const reference = params.reference
-  const [queryClient] = useState(() => new QueryClient())
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col px-4 py-10">
-        <ConfirmationContent reference={reference} />
-      </main>
-    </QueryClientProvider>
+    <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col px-4 py-10">
+      <ConfirmationContent reference={reference} />
+    </main>
   )
 }

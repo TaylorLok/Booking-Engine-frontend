@@ -1,7 +1,5 @@
 'use client'
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { useState } from 'react'
 import { DatesStep } from '@/components/steps/DatesStep'
 import { RoomsStep } from '@/components/steps/RoomsStep'
 import { SummaryStep } from '@/components/steps/SummaryStep'
@@ -76,11 +74,5 @@ function BookingContent() {
 }
 
 export default function BookingPage() {
-  const [queryClient] = useState(() => new QueryClient())
-
-  return (
-    <QueryClientProvider client={queryClient}>
-      <BookingContent />
-    </QueryClientProvider>
-  )
+  return <BookingContent />
 }
