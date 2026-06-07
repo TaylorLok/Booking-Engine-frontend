@@ -1,60 +1,60 @@
-import { create } from 'zustand'
-import { createJSONStorage, persist } from 'zustand/middleware'
+import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 
-export type BookingStep = 1 | 2 | 3 | 4 | 5
+export type BookingStep = 1 | 2 | 3 | 4 | 5;
 
 export type SelectedRoom = {
-  id: string
-  slug: string
-  name: string
-  price_per_night_cents: number
-  adults: number
-  children: number
-}
+  id: string;
+  slug: string;
+  name: string;
+  price_per_night_cents: number;
+  adults: number;
+  children: number;
+};
 
 export type User = {
-  id: string
-  firstname: string
-  surname: string
-  email: string
-  cellphone: string
-}
+  id: string;
+  firstname: string;
+  surname: string;
+  email: string;
+  cellphone: string;
+};
 
 type BookingSlice = {
-  step: BookingStep
-  checkIn: string | null
-  checkOut: string | null
-  selectedRooms: SelectedRoom[]
-  guests: number
-  idempotencyKey: string | null
-}
+  step: BookingStep;
+  checkIn: string | null;
+  checkOut: string | null;
+  selectedRooms: SelectedRoom[];
+  guests: number;
+  idempotencyKey: string | null;
+};
 
 type AuthSlice = {
-  user: User | null
-  isAuthenticated: boolean
-  authModalOpen: boolean
-}
+  user: User | null;
+  isAuthenticated: boolean;
+  authModalOpen: boolean;
+};
 
 type BookingActions = {
-  setDates: (checkIn: string | null, checkOut: string | null) => void
-  setStep: (step: BookingStep) => void
-  nextStep: () => void
-  prevStep: () => void
-  addRoom: (room: SelectedRoom) => void
-  removeRoom: (id: string) => void
-  setGuests: (guests: number) => void
-  generateIdempotencyKey: () => void
-  resetBooking: () => void
-}
+  setDates: (checkIn: string | null, checkOut: string | null) => void;
+  setStep: (step: BookingStep) => void;
+  nextStep: () => void;
+  prevStep: () => void;
+  addRoom: (room: SelectedRoom) => void;
+  removeRoom: (id: string) => void;
+  setGuests: (guests: number) => void;
+  generateIdempotencyKey: () => void;
+  resetBooking: () => void;
+};
 
 type AuthActions = {
-  setUser: (user: User) => void
-  logout: () => void
-  openAuthModal: () => void
-  closeAuthModal: () => void
-}
+  setUser: (user: User) => void;
+  logout: () => void;
+  openAuthModal: () => void;
+  closeAuthModal: () => void;
+};
 
-type BookingStore = BookingSlice & AuthSlice & BookingActions & AuthActions
+type BookingStore = BookingSlice & AuthSlice & BookingActions & AuthActions;
 
 const initialBookingState: BookingSlice = {
   step: 1,
@@ -63,25 +63,25 @@ const initialBookingState: BookingSlice = {
   selectedRooms: [],
   guests: 1,
   idempotencyKey: null,
-}
+};
 
 const initialAuthState: AuthSlice = {
   user: null,
   isAuthenticated: false,
   authModalOpen: false,
-}
+};
 
 const sessionStorageAdapter = createJSONStorage<BookingSlice>(() => {
-  if (typeof window !== 'undefined') {
-    return sessionStorage
+  if (typeof window !== "undefined") {
+    return sessionStorage;
   }
 
   return {
     getItem: () => null,
     setItem: () => {},
     removeItem: () => {},
-  }
-})
+  };
+});
 
 export const useBookingStore = create<BookingStore>()(
   persist(
@@ -94,16 +94,16 @@ export const useBookingStore = create<BookingStore>()(
       setStep: (step) => set({ step }),
 
       nextStep: () => {
-        const { step } = get()
+        const { step } = get();
         if (step < 5) {
-          set({ step: (step + 1) as BookingStep })
+          set({ step: (step + 1) as BookingStep });
         }
       },
 
       prevStep: () => {
-        const { step } = get()
+        const { step } = get();
         if (step > 1) {
-          set({ step: (step - 1) as BookingStep })
+          set({ step: (step - 1) as BookingStep });
         }
       },
 
@@ -138,7 +138,7 @@ export const useBookingStore = create<BookingStore>()(
       closeAuthModal: () => set({ authModalOpen: false }),
     }),
     {
-      name: 'booking-store',
+      name: "booking-store",
       storage: sessionStorageAdapter,
       partialize: (state) => ({
         step: state.step,
@@ -150,4 +150,4 @@ export const useBookingStore = create<BookingStore>()(
       }),
     },
   ),
-)
+);

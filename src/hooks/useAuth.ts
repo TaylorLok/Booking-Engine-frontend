@@ -26,6 +26,12 @@ export function useAuth() {
   }, [query.data, setUser])
 
   useEffect(() => {
+    if (query.isSuccess && query.data === null) {
+      logout()
+    }
+  }, [query.isSuccess, query.data, logout])
+
+  useEffect(() => {
     if (
       query.error &&
       isAxiosError(query.error) &&
